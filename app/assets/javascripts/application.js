@@ -5,7 +5,7 @@
 // the compiled file.
 //
 //= require modernizr
-//= require jquery
+//= require jquery-1.4
 //= require jquery_ujs
 //= require rails.validations
 //= require_tree .
