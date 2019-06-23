@@ -4,8 +4,11 @@ class User < ActiveRecord::Base
   include Commentable,
           Followable
 
+
+  # Token authenticable
+  # :token_authenticatable,
+  
   devise :database_authenticatable,
-         :token_authenticatable,
          :omniauthable,
          :confirmable,
          :recoverable,
@@ -17,15 +20,15 @@ class User < ActiveRecord::Base
   attr_readonly :messages_count
 
   attr_accessor   :login
-  attr_accessible :login,
-                  :username,
-                  :name,
-                  :email,
-                  :password,
-                  :password_confirmation,
-                  :remember_me
+  # attr_accessible :login,
+  #                 :username,
+  #                 :name,
+  #                 :email,
+  #                 :password,
+  #                 :password_confirmation,
+  #                 :remember_me
 
-  has_many :messages, :order => 'created_at DESC'
+  has_many :messages
 
   has_one  :investor_profile
 
@@ -40,14 +43,16 @@ class User < ActiveRecord::Base
 
   validates :username, :presence     => true,
                        :uniqueness   => { :case_sensitive => false },
-                       :length       => { :within => 4..20 },
-                       :format       => { :with => /^[A-Za-z0-9_]+$/ }
-  validates :name,     :presence     => true,
-                       :length       => { :within => 4..30 }
+                       :length       => { :in => 4..20 }
+                      #  :format       => { :with => /[A-Za-z0-9_]+$/ }
+  validates :name, presence: true, length: { in: 4..30 }
 
-  scope :new_users,     joins { [startup_users.outer, investor_profile.outer] }.where { (startup_users.user_email == nil) & (investor_profiles.user_id == nil) }
-  scope :entrepreneurs, joins { startup_users }.where { startup_users.user_email != nil }
-  scope :investors,     joins { investor_profile }.where { investor_profiles.user_id != nil }
+  # scope :new_users,     joins { [startup_users.outer, investor_profile.outer] }.where { (startup_users.user_email == nil) & (investor_profiles.user_id == nil) }
+  scope :new_users,     -> { joins([:startup_users, :investor_profile]).where('startup_users.user_email IS NULL AND investor_profiles.user_id IS NULL') }  
+  # scope :entrepreneurs, joins { startup_users }.where { startup_users.user_email != nil }
+  scope :entrepreneurs, -> { joins(:startup_users).where('startup_users.user_email IS NOT NULL') }
+  # scope :investors,     joins { investor_profile }.where { investor_profiles.user_id != nil }
+  scope :investors,     -> { joins(:investor_profile).where('investor_profiles.user_id IS NOT NULL') }  
 
   before_save :email_nomarlisation
 

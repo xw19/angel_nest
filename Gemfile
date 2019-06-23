@@ -1,18 +1,19 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~> 3.2.2'
+gem 'rails', '~> 4.2.0'
 gem 'mysql2'
 
 # core function gems
-gem 'devise',              '~> 2.0.0'
-gem 'omniauth',            '~> 1.0.1'
-gem 'inherited_resources', '~> 1.3.0'
-gem 'simple_form',         '~> 2.0.0'
-gem 'nested_form',         '~> 0.2.0'
-gem 'squeel',              '~> 0.9.3'
+gem 'devise'
+gem 'omniauth'
+gem 'inherited_resources'
+gem 'simple_form'
+gem 'nested_form'
+gem 'squeel'
 gem 'rails_config'
 gem 'has_scope'
 gem 'kaminari'
+gem 'rake'
 
 # geo related gems
 gem 'carmen'
@@ -25,17 +26,16 @@ gem 'modernizr-rails'
 gem 'jquery-rails'
 gem 'mini_magick'
 gem 'carrierwave'
-gem 'client_side_validations', '~> 3.1.0'
+gem 'client_side_validations'
+gem 'client_side_validations-simple_form'
 
 # asset compilation
 gem 'execjs'
 gem 'therubyracer'
 
-group :assets do
-  gem 'sass-rails'
-  gem 'coffee-rails'
-  gem 'uglifier'
-end
+gem 'sass-rails'
+gem 'coffee-rails'
+gem 'uglifier'
 
 group :development, :test do
   gem 'capybara',           '~> 1.1.2'
@@ -52,3 +52,7 @@ group :test do
   gem 'turn',      :require => false
   gem 'simplecov', :require => false
 end
+
+gem 'config'
+gem 'activeresource'
+gem 'protected_attributes'

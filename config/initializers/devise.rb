@@ -80,7 +80,7 @@ Devise.setup do |config|
 
   # If true, uses the password salt as remember token. This should be turned
   # to false if you are not using database authenticatable.
-  config.use_salt_as_remember_token = true
+  # config.use_salt_as_remember_token = true
 
   # Options to be passed to the created cookie. For instance, you can set
   # :secure => true in order to force SSL only cookies.
@@ -175,7 +175,7 @@ Devise.setup do |config|
   # config.navigational_formats = [:"*/*", "*/*", :html]
 
   # The default HTTP method used to sign out a resource. Default is :get.
-  # config.sign_out_via = :get
+  config.sign_out_via = :get
 
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
@@ -191,4 +191,5 @@ Devise.setup do |config|
   #   manager.intercept_401 = false
   #   manager.default_strategies(:scope => :user).unshift :some_external_strategy
   # end
+  config.secret_key = '112555139d2efaffc9078c7856d865feeca602716a71294c661e8e0003926f564bf48b690b3458aff9e06621cbd0a2c22196340d899ec892d1a6981e091d9edf'
 end

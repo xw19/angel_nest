@@ -1,13 +1,6 @@
 AngelNest::Application.routes.draw do
   resources :startup_photos
 
-  devise_for :users
-
-  resources :users do
-    resources :startups
-    resource  :investor
-  end
-
   resources :investors,     :only => :index
   resources :entrepreneurs, :only => :index
   resources :startups do
@@ -15,32 +8,43 @@ AngelNest::Application.routes.draw do
     resources :proposals,   :only => [:new, :edit, :create, :update]
     member do
       get  'attach_user', :as => :attach_user_to
-      post 'attach_user', :as => :attach_user_to
+      post 'attach_user', :as => :post_attach_user_to
       get  'update_user', :as => :update_user_in
-      post 'update_user', :as => :update_user_in
+      post 'update_user', :as => :post_update_user_in
       get  'detach_user', :as => :detach_user_from
-      post 'detach_user', :as => :detach_user_from
+      post 'detach_user', :as => :post_detach_user_from
     end
   end
 
   match 'startups/:id/profile_details' => 'startups#profile_details',         :via => :get,    :as => :startup_profile_details
   match 'startups/:id/profile_team'    => 'startups#profile_team',            :via => :get,    :as => :startup_profile_team
-  match 'startups/:id/photos'          => 'startups#photos',                  :via => :get,    :as => :startup_photos
+  match 'startups/:id/photos'          => 'startups#photos',                  :via => :get,    :as => :get_startup_photo
   match 'startups/:id/upload_photos'   => 'startups#upload_photos',           :via => :get,    :as => :startup_upload_photos
 
   match 'u/:username'                  => 'users#show',                       :via => :get,    :as => :username
 
   match 'my/profile'                   => 'users#show',                       :via => :get
   match 'my/home'                      => 'users#home',                       :via => :get
-  match 'my/private_messages'          => 'messages#send_private_message',    :via => :post,   :as => :my_private_messages
-  match 'my/private_messages/:id'      => 'messages#show_private_message',    :via => :get,    :as => :my_private_message
-  match 'my/private_messages/:id'      => 'messages#reply_private_message',   :via => :post,   :as => :my_private_message
-  match 'my/private_messages/:id'      => 'messages#archive_private_message', :via => :delete, :as => :my_private_message
+  match 'my/private_messages'          => 'messages#send_private_message',    :via => :post,   :as => :post_my_private_messages
+  match 'my/private_messages/:id'      => 'messages#show_private_message',    :via => :get,    :as => :get_my_private_message
+  match 'my/private_messages/:id'      => 'messages#reply_private_message',   :via => :post,   :as => :post_my_private_message
+  match 'my/private_messages/:id'      => 'messages#archive_private_message', :via => :delete, :as => :delete_my_private_message
   match 'my/message_inboxes(/:type)'   => 'users#message_inboxes',            :via => :get,    :as => :my_message_inbox
   match 'my/micro_posts'               => 'users#add_micro_post',             :via => :post
 
   match 'my/follow/:target_id'         => 'users#follow_target',              :via => :post,   :as => :follow_target
   match 'my/unfollow/:target_id'       => 'users#unfollow_target',            :via => :post,   :as => :unfollow_target
+
+  devise_for :users
+
+  devise_scope :user do
+    get '/sign_out', to: 'devise/sessions#destroy', as: 'signout'
+  end
+
+  resources :users do
+    resources :startups
+    resource  :investor
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

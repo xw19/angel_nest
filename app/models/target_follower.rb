@@ -3,6 +3,6 @@ class TargetFollower < ActiveRecord::Base
   belongs_to :follower, :polymorphic => true, :counter_cache => :followed_count
   belongs_to :target,   :polymorphic => true, :counter_cache => :followers_count
 
-  attr_accessible :follower_id,
-                  :follower_type
+  # attr_accessible :follower_id,
+  #                 :follower_type
 end

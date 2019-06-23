@@ -69,4 +69,14 @@ class StartupsController < ApplicationController
       resource.confirm_user(parent)
     end
   end
+
+  def startup_params
+    params.require(:startup).permit(:name,
+                      :pitch,
+                      :funds_to_raise,
+                      :stage_identifier,
+                      :market_identifier,
+                      :location,
+                      :description)
+  end
 end

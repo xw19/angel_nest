@@ -6,29 +6,29 @@ class Message < ActiveRecord::Base
   belongs_to :topic, :class_name => 'Message', :foreign_key => 'topic_id'
   has_many :replies, :class_name => 'Message', :foreign_key => 'topic_id'
 
-  attr_accessible :content,
-                  :is_private,
-                  :target_id,
-                  :target_type
+  # attr_accessible :content,
+  #                 :is_private,
+  #                 :target_id,
+  #                 :target_type
   attr_protected  :nil, :as => :internal
 
   validates :content, :presence => true,
                       :length   => { :maximum => 140 }
 
-  scope :default_order,    order('created_at DESC')
-  scope :topics,           where { topic_id == nil }
-  scope :replies,          where { topic_id != nil }
-  scope :public_only,      where(:is_private => false)
-  scope :private_only,     where(:is_private => true)
-  scope :read,             where(:is_read => true)
-  scope :unread,           where(:is_read => false)
-  scope :archived,         where(:is_archived => true)
-  scope :unarchived,       where(:is_archived => false)
-  scope :with_proposal,    where { proposal_id != nil }
-  scope :without_proposal, where { proposal_id == nil }
-  scope :micro_posts,      where(:target_id => nil)
-  scope :on_users,         where(:target_type => 'User')
-  scope :on_startups,      where(:target_type => 'Startup')
+  scope :default_order,    -> { order('created_at DESC') }
+  scope :topics,           -> { where { topic_id == nil } }
+  scope :replies,          -> { where { topic_id != nil } }
+  scope :public_only,      -> { where(:is_private => false) }
+  scope :private_only,     -> { where(:is_private => true) }
+  scope :read,             -> { where(:is_read => true) }
+  scope :unread,           -> { where(:is_read => false) }
+  scope :archived,         -> { where(:is_archived => true) }
+  scope :unarchived,       -> { where(:is_archived => false) }
+  scope :with_proposal,    -> { where { proposal_id != nil } }
+  scope :without_proposal, -> { where { proposal_id == nil } }
+  scope :micro_posts,      -> { where(:target_id => nil) }
+  scope :on_users,         -> { where(:target_type => 'User') }
+  scope :on_startups,      -> { where(:target_type => 'Startup') }
 
   def is_public?
     !is_private

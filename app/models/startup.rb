@@ -9,20 +9,20 @@ class Startup < ActiveRecord::Base
 
   has_many :startup_users
   has_many :users,      :through => :startup_users
-  has_many :members,    :through => :startup_users, :source => :user, :conditions => { 'startup_users.role_identifier' => 'member' }
-  has_many :investors,  :through => :startup_users, :source => :user, :conditions => { 'startup_users.role_identifier' => 'investor' }
-  has_many :advisors,   :through => :startup_users, :source => :user, :conditions => { 'startup_users.role_identifier' => 'advisor' }
-  has_many :incubators, :through => :startup_users, :source => :user, :conditions => { 'startup_users.role_identifier' => 'incubator' }
+  has_many :members, -> { joins(:startup_users).where(startup_users: { role_identifier: 'member'} ) }, :through => :startup_users, :source => :user
+  has_many :investors,  -> {  joins(:startup_users).where(startup_users: { role_identifier: 'investor'} ) },  :through => :startup_users, :source => :user
+  has_many :advisors,   -> {  joins(:startup_users).where(startup_users: { role_identifier: 'advisor'} ) },  :through => :startup_users, :source => :user
+  has_many :incubators,  -> {  joins(:startup_users).where(startup_users: { role_identifier: 'incubator'} ) }, :through => :startup_users, :source => :user
 
   has_many :proposals
 
-  attr_accessible :name,
-                  :pitch,
-                  :funds_to_raise,
-                  :stage_identifier,
-                  :market_identifier,
-                  :location,
-                  :description
+  # attr_accessible :name,
+  #                 :pitch,
+  #                 :funds_to_raise,
+  #                 :stage_identifier,
+  #                 :market_identifier,
+  #                 :location,
+  #                 :description
 
   accepts_nested_attributes_for :photos, :limit => 5, :allow_destroy => true, :reject_if => :all_blank
 
@@ -39,8 +39,8 @@ class Startup < ActiveRecord::Base
                                 :inclusion    => { :in => I18n.t('startup.market_identifiers').keys.map(&:to_s) }
   validates :description,       :presence     => true
 
-  scope :involved, where { startup_users.role_identifier != 'investor' }
-  scope :invested, where { startup_users.role_identifier == 'investor' }
+  scope :involved, -> { where { startup_users.role_identifier != 'investor' } }
+  scope :invested, -> { where { startup_users.role_identifier == 'investor' } }
 
   def self.stages
     I18n.t 'startup.stage_identifiers'
