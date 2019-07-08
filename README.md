@@ -68,3 +68,40 @@ Dual licensed under the [MIT](http://www.opensource.org/licenses/mit-license.php
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/fredwu/angel_nest/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
+
+## Rails 4 Changes
+
+- Upgrade to rails 4.2
+- Upgrade devise
+	- remove token authentication as it is not supported by the devise https://github.com/plataformatec/devise/issues/2739
+	- Add devise secret token
+	- Signout by default now uses delete instead of get so need to change that back to get
+- Model level changes
+	- Rails update scopes to use lambda expressions
+	- Added protected attributes gem
+	- Removed attributes accessor
+- Controller level changes
+	- Added strong parameters in startup
+- Config level Changes
+	- Added eager load options
+	- Rails config file rewrite
+	- remove assets groups
+	- Set log level to info in production
+	- set css and js compressors
+	- Added asstes precompiler
+	- remove assets groups
+- Route Changes
+	- Lot of conflicting routes are fixed with http verb in front of them
+- Views fix
+	- Slim fixes at app/views/proposals/_form.html.slim
+	- id was missing at app/views/users/_index.html.slim
+- Javascript fixes
+	- Needed to manually add jquery 1.4
+- Hacks
+	- Primary key issue https://stackoverflow.com/questions/33742967/primary-key-issue-with-creating-tables-in-rails-using-rake-dbmigrate-command-wi
+	- Last comment issue https://stackoverflow.com/questions/35893584/nomethoderror-undefined-method-last-comment-after-upgrading-to-rake-11
+
+- To fix
+	- JS works fine on dev not on prod
+	- Changes to all controllers to support strong parameters
+
